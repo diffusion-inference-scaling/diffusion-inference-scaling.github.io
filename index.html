@@ -50,6 +50,13 @@
       margin: 0 auto;
       text-align: left;
     }
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .table-wrapper table {
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -152,7 +159,8 @@
         </div>
         <h3>Offline RL</h3>
         We use a pretrained diffusion model and a pretrained Q-function as verifier for offline RL. Our training-free method can achieve comparable performance to the state-of-the-art training-required methods.
-        <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; font-family: sans-serif;">
+        <div class="table-wrapper">
+          <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; font-family: sans-serif;">
     <caption style="caption-side: top; font-weight: bold; text-align: left; padding: 10px 0;">
       Performance on D4RL locomotion tasks (mean ± std across 5 trials). Bold values are within 5% of the best for each task.
     </caption>
@@ -184,6 +192,7 @@
       <tr><td colspan="2"><b>Average (Locomotion)</b></td><td>63.9</td><td>51.9</td><td>76.9</td><td>75.6</td><td>81.8</td><td>75.3</td><td>86.3</td><td><b>86.6</b></td><td>86.1</td></tr>
     </tbody>
   </table>
+        </div>
         <h3>Image Generation</h3>
         <p>
       We evaluate our method on compositional text-to-image generation on <a href="https://github.com/Karine-Huang/T2I-CompBench">CompBench</a>, and class conditional ImageNet generation using an unconditional diffusion model with a pretrained classifier.
