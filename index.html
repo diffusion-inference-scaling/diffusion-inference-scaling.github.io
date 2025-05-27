@@ -149,7 +149,8 @@
       We evaluate our method on compositional text-to-image generation on <a href="https://github.com/Karine-Huang/T2I-CompBench">CompBench</a>, and class conditional ImageNet generation using an unconditional diffusion model with a pretrained classifier.
     </p>
     <p>
-      In compositional test-to-image, we show that inference-time search against a pretrained visual verifier such as <a href="https://github.com/xingyizhou/UniDet">UniDet</a> and <a href="https://github.com/salesforce/BLIP">BLIP</a> can generate images with complex compositional prompts.
+      In compositional test-to-image, we show that inference-time search against a pretrained visual verifier such as <a href="https://github.com/xingyizhou/UniDet">UniDet</a> and <a href="https://github.com/salesforce/BLIP">BLIP</a> can generate images with complex compositional prompts. Below show the results of prompt "eight bottles" with and without inference scaling.
+       After inference scaling the number of bottles in the generated image follows the prompt, while without inference scaling the number of bottles is not consistent with the prompt.
     </p>
     <div class="fig-row">
       <figure>
@@ -158,12 +159,13 @@
       </figure>
       <figure>
         <img src="t2i2.png" alt="correct sample with inference scaling" />
-        <figcaption>Generated sample with inference scaling using UniDet as verifier. The number of bottles follows the prompt "eight bottles"</figcaption>
+        <figcaption>Generated sample with inference scaling using UniDet. The number of bottles follows the prompt "eight bottles"</figcaption>
       </figure>
     </div>
 
       <p>
-        In class conditional image generation, we can generate class-conditional samples using an unconditional diffusion model with a pretrained ViT classifier as verifier.
+        In class-conditional image generation, we generate samples aligned with a target class label using an unconditional diffusion model guided by a pretrained ViT classifier as a verifier.
+Below, we show the uncurated samples for class 222 (“kuvasz”) on ImageNet, demonstrating diverse samples that accurately reflect the class label.
       </p>
       <figure>
         <img src="imagenet.png" alt="ImageNet class conditional generation", width="60%"/>
