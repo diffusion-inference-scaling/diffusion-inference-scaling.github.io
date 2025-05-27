@@ -8,9 +8,9 @@ body {
 }
 
 main {
-  max-width: 100vw;
+  max-width: 90vw;
   margin: 0;
-  padding: 20px 20px;
+  padding: 40px 40px;
 }
 
 header {
@@ -74,7 +74,9 @@ figure {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 2em 0;
+  justify-content: center;
+  margin: 2em auto;
+  max-width: 80%;
 }
 
 figcaption {
@@ -82,33 +84,45 @@ figcaption {
   font-size: 0.95em;
   text-align: center;
   margin-top: 0.5em;
-  max-width: 90%;
+  max-width: 80%;
 }
 
 .fig-row {
   display: flex;
-  gap: 2em; /* space between figures */
-  justify-content: center;
+  gap: 2em;
+  justify-content: center;   /* Center figures horizontally */
   align-items: flex-start;
+  width: 100%;
+  margin: 2em 0;
 }
 
 .fig-row figure {
-  flex: 1 1 0;
-  max-width: 100%;
   align-items: center;
+  display: flex;
+  flex-direction: column;
 }
+
 .fig-row img {
   width: 100%;
   height: auto;
   display: block;
 }
 
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  height: auto;
+}
+
 table {
   font-size: 0.85em;
   border-collapse: collapse;
-  width: 100%;
+  width: 80%;
   margin: 1.5em 0;
   padding: 20px 20px;
+  align-items: center;
 }
 
 th, td {
