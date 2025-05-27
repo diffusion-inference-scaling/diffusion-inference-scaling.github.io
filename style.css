@@ -100,9 +100,9 @@ figcaption {
   display: flex;
   gap: 2em;
   justify-content: center;
-  align-items: center;
-  width: 80%;      /* Set to 80% of main text width */
-  margin: 2em auto; /* Center the fig row horizontally */
+  align-items: flex-start; /* Align figures at the top for horizontal alignment */
+  width: 80%;             /* About 80% of main text width */
+  margin: 2em auto;       /* Center the fig row horizontally */
 }
 
 .fig-row figure {
