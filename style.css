@@ -11,7 +11,7 @@ body {
 }
 
 main {
-  width: 600px;
+  width: 700px;
   margin: 0 auto;
   padding: 40px 20px;
   box-sizing: border-box;
@@ -36,7 +36,8 @@ h1 {
   margin: 0.2em 0;
 }
 
-.authors, .date {
+.authors,
+.date {
   color: #888;
   font-size: 0.9em;
   margin: 0.1em 0;
@@ -61,13 +62,13 @@ h3 {
 p {
   line-height: 1.7;
   margin: 1em 0;
-  text-align: left; /* Optionally center lists and paragraphs */
+  text-align: left;
 }
 
 ul {
   margin-left: 1.5em;
   line-height: 1.6;
-  text-align: left; /* Optionally center lists and paragraphs */
+  text-align: left;
 }
 
 pre {
@@ -78,6 +79,7 @@ pre {
   font-size: 0.95em;
   border-radius: 4px;
 }
+
 figure {
   display: flex;
   flex-direction: column;
@@ -98,7 +100,7 @@ figcaption {
 .fig-row {
   display: flex;
   gap: 2em;
-  justify-content: center;   /* Center figures horizontally */
+  justify-content: center;
   align-items: flex-start;
   width: 100%;
   margin: 2em 0;
@@ -127,13 +129,15 @@ img {
 table {
   font-size: 0.85em;
   border-collapse: collapse;
-  width: 600px;
-  margin: 1.5em 0;
-  padding: 20px 20px;
+  width: 700px; /* Match main content width */
+  margin: 1.5em auto; /* Center the table horizontally */
+  padding: 0;
+  box-sizing: border-box;
   align-items: center;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 0.4em 0.6em;
   text-align: left;
@@ -158,8 +162,8 @@ th {
   gap: 10px;
   font-size: 1rem;
   color: #444;
-  justify-content: center; /* Add this line to center author names */
-  text-align: center;      /* Add this line for text centering */
+  justify-content: center;
+  text-align: center;
 }
 
 .correspondence {
@@ -167,5 +171,5 @@ th {
   color: #555;
   margin-top: 10px;
   margin-bottom: 40px;
-  text-align: center; /* Add this line */
+  text-align: center;
 }
