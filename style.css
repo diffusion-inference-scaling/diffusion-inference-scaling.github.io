@@ -11,7 +11,6 @@ body {
 }
 
 main {
-  width: 700px;
   margin: 0 auto;
   padding: 40px 20px;
   box-sizing: border-box;
@@ -19,7 +18,7 @@ main {
 }
 
 header {
-  max-width: 800px;
+  width: 900px;
   margin: 0 auto 60px auto;
   text-align: center;
 }
@@ -101,9 +100,9 @@ figcaption {
   display: flex;
   gap: 2em;
   justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  margin: 2em 0;
+  align-items: center;
+  width: 80%;      /* Set to 80% of main text width */
+  margin: 2em auto; /* Center the fig row horizontally */
 }
 
 .fig-row figure {
@@ -127,7 +126,7 @@ img {
 }
 
 table {
-  font-size: 0.85em;
+  font-size: 0.65em;
   border-collapse: collapse;
   width: 700px; /* Match main content width */
   margin: 1.5em auto; /* Center the table horizontally */
@@ -155,6 +154,9 @@ th {
   text-align: left;
 }
 
+
+
+
 .author-list {
   margin-top: 10px;
   display: flex;
@@ -162,14 +164,35 @@ th {
   gap: 10px;
   font-size: 1rem;
   color: #444;
-  justify-content: center;
+  align-content: center;
+  justify-content: center;   /* Center the author list horizontally */
+  text-align: center;        /* Center text inside each span */
+}
+.author-list span {
+  white-space: nowrap;
   text-align: center;
 }
-
 .correspondence {
   font-size: 0.9rem;
   color: #555;
   margin-top: 10px;
   margin-bottom: 40px;
-  text-align: center;
+}
+
+
+
+
+.content {
+  width: 700px;
+  margin: 0 auto;
+  text-align: left;
+}
+.table-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.table-wrapper table {
+  width: 100%;
 }
