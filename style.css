@@ -90,7 +90,7 @@ figure {
 
 figcaption {
   color: #888;
-  font-size: 0.5em;
+  font-size: 0.95em;
   text-align: center;
   margin-top: 0.5em;
   max-width: 80%;
@@ -126,7 +126,7 @@ img {
 }
 
 table {
-  font-size: 0.65em;
+  font-size: 0.75em;
   border-collapse: collapse;
   width: 700px; /* Match main content width */
   margin: 1.5em auto; /* Center the table horizontally */
