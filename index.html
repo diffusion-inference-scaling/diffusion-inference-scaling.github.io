@@ -9,157 +9,216 @@
   <script id="MathJax-script" async
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
   </script>
+  <style>
+    .author-list {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 1rem;
+      color: #444;
+    }
+    .author-list span {
+      white-space: nowrap;
+    }
+    .correspondence {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 10px;
+      margin-bottom: 40px;
+    }
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #ffffff;
+      color: #111;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    main {
+      width: 800px;
+      margin: 0 auto;
+      padding: 40px 0;
+      box-sizing: border-box;
+    }
+
+    .content {
+      width: 600px;
+      margin: 0 auto;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
   <main>
     <header>
       <h1>Inference-Time Scaling of Diffusion Models through Classical Search</h1>
-      <!-- <p class="subtitle">Through Classical Search</p> -->
-      <p class="authors">Anonymous Authors</p>
-
+      <div class="author-list">
+        <span>Xiangcheng Zhang</span>
+        <span>Haowei Lin</span>
+        <span>Haotian Ye</span>
+        <span>James Zou</span>
+        <span>Jianzhu Ma</span>
+        <span>Yitao Liang</span>
+        <span>Yilun Du<sup>†</sup></span>
+      </div>
+      <div class="correspondence">
+        <sup>†</sup> Corresponding author: Yilun Du. Contact: <a href="mailto:ydu@seas.harvard.edu">ydu@seas.harvard.edu</a>
+      </div>
     </header>
+    <div class="content">
+      <section>
+        <p>Starting from the foundamental principles from classical search methods, such as hill climbing and graph search, we propose a 
+          principled and general framework for inference-time scaling of diffusion models through search. Our framework consists of the following components:
+          <ul>
+            <li>Gradient-driven local search via annealed Langevin MCMC</li>
+            <li>Tree-based global exploration via BFS/DFS</li>
+          </ul>
+          We carry out extensive experiments on various tasks, including long horizon maze planning, offline reinforcement learning and image generation, showing that classical search principles could serve as the foundation for inference-time scaling of diffusion models.
+        </p>
 
-    <section>
-      <p>Starting from the foundamental principles from classical search methods, such as hill climbing and graph search, we propose a 
-        principled and general framework for inference-time scaling of diffusion models through search. Our framework consists of the following components:
-        <ul>
-          <li>Gradient-driven local search via annealed Langevin MCMC</li>
-          <li>Tree-based global exploration via BFS/DFS</li>
-        </ul>
-      </p>
+      </section>
 
-    </section>
+      <section>
+        <h2>Introduction</h2>
+        <p>Diffusion models have demonstrated exceptional performance in generative modeling for continous domains such as images, videos and robotics. However, they still struggles with 
+          flexible control at inference time, which is crucial for tasks like planning and reinforcement learning. We approach this challenge from the inference-time scaling perspective, leveraging classical search methods to 
+          search the generative space of diffusion models for high quality samples.
+        </p>
+        <figure>
+          <img src="teaser.png" alt="Illustration of our search framework" />
+          <figcaption>Illustration of our search framework. </figcaption>
+        </figure>
+        <p>
+          As shown in the above figure, we first search the vicinity of the samples via gradient-guided local search. 
+          To avoid being stuck in local maximums and OOD samples, 
+          we explore the the diverse modes in the multimodal generative space globally, 
+          improving the effciency using tree-based search methods such as BFS and DFS. 
+          This unfied search framework allows us to efficiently sample from global optimal modes with high quality samples.
+        </p>
+      </section>
 
-    <section>
-      <h2>Introduction</h2>
-      <p>Diffusion models have demonstrated exceptional performance in continuous domains domain generation such as images, videos and robotics. However, they still struggles with 
-        flexible control at inference time, which is crucial for tasks like planning and reinforcement learning. We approach this challenge from the inference-time scaling perspective, leveraging classical search methods to 
-        search the generative space of diffusion models for high quality samples.
+      <section>
+        <h2>Local Search</h2>
+        <p>We fomulate the problem as sampling from the composed distribution of the base distribution \({p}_0(\mathbf{x})\) and the verifier score
+          \(f(\mathbf{x})\):
+        </p>
+        <p>
+          $$ \tilde{p}_0(\mathbf{x}_0) \propto p_0(\mathbf{x}_0) f(\mathbf{x}_0)^\lambda $$
+        </p>
+        <p>
+          Through annealed Langevin MCMC, we construct a sequence of distributions \(\tilde{q}_t(\mathbf{x}_t)\) that gradually approaches \(\tilde{p}_0(\mathbf{x}_0)\): 
+          $$ \tilde{q}_t(\mathbf{x}_t) \propto  q_t(\mathbf{x}_t) \tilde{f}_t(\mathbf{x}_t) $$
+          where \(q_t(\mathbf{x}_t)\) is the distribution of the diffusion model at time step \(t\), and \(\tilde{f}_t(\mathbf{x}_t)\) is constructed using \(f(\mathbf{x}_{0|t})\).
+          We then sample from the distribution \(\tilde{q}_t(\mathbf{x}_t)\) at each step \(t\) using Langevin dynamics:
+          $$ \mathbf{x}_{t}^{i+1} = \mathbf{x}_t^i + \frac{\epsilon}{2} \nabla_{\mathbf{x}_t} \log \tilde{q}_t(\mathbf{x}_t^i) + \sqrt{\epsilon} \mathbf{z}_t^i\,,~~~\mathbf{z}_t^i\sim\mathcal{N}(\mathbf{0},\mathbf{I}) $$
+          which can be seen as conducting hill-climbing, following the gradient flow of the KL divergence between \(\tilde{q}_t\) and the distribution of current sample \(\mathbf{x}_t\).
+        </p>
+        
+      </section>
+
+      <section>
+        <h2>Global Search</h2>
+        <p>To explore diverse modes in the multimodal distribution induced by diffusion models, we view the sampling process as a search tree, and use classical search methods such as 
+          breadth-first search (BFS) and depth-first search (DFS) to explore the space efficiently.
+        </p>
+         <figure>
+          <img src="treesearch.png" alt="Search tree for sampling" />
+          <figcaption>Illustration of global tree search methods</figcaption>
+        </figure>
+        <p>
+          This fomulation encompasses other search methods as instances or combinations of BFS and DFS, and through our extensive experiments, we demonstrate the superior efficiency and adaptivity of our search framework compared to existing methods.
+        </p>
+        
+      </section>
+
+      <section>
+        <h2>Experiments</h2>
+        <p>We conduct extensive experiments on various tasks, including long horizon maze planning, offline RL and image generation</p>
+        <h3>Maze Planning</h3>
+        We show that with inference-scaling, diffusion models can succeed in long horizon planning in complex maze environments.
+        <div class="fig-row">
+          <figure>
+            <img src="maze_giant.png" alt="maze_giant" />
+            <figcaption>Plan for PointMaze Giant</figcaption>
+          </figure>
+          <figure>
+            <img src="maze_ultra.png" alt="maze_ultra"/>
+            <figcaption>Plan for PointMaze Ultra</figcaption>
+          </figure>
+        </div>
+        <h3>Offline RL</h3>
+        We use a pretrained diffusion model and a pretrained Q-function as verifier for offline RL. Our training-free method can achieve comparable performance to the state-of-the-art training-required methods.
+        <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; font-family: sans-serif;">
+    <caption style="caption-side: top; font-weight: bold; text-align: left; padding: 10px 0;">
+      Performance on D4RL locomotion tasks (mean ± std across 5 trials). Bold values are within 5% of the best for each task.
+    </caption>
+    <thead style="background-color: #f0f0f0;">
+      <tr>
+        <th>Dataset</th>
+        <th>Environment</th>
+        <th>CQL</th>
+        <th>BCQ</th>
+        <th>IQL</th>
+        <th>SfBC</th>
+        <th>DD</th>
+        <th>Diffuser</th>
+        <th>D-QL</th>
+        <th>QGPO</th>
+        <th>TTS (ours)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Medium-Expert</td><td>HalfCheetah</td><td>62.4</td><td>64.7</td><td>86.7</td><td><b>92.6</b></td><td>90.6</td><td>79.8</td><td><b>96.1</b></td><td><b>93.5</b></td><td><b>93.9 ± 0.3</b></td></tr>
+      <tr><td>Medium-Expert</td><td>Hopper</td><td>98.7</td><td>100.9</td><td>91.5</td><td>108.6</td><td><b>111.8</b></td><td><b>107.2</b></td><td><b>110.7</b></td><td><b>108.0</b></td><td>104.4 ± 3.1</td></tr>
+      <tr><td>Medium-Expert</td><td>Walker2d</td><td><b>111.0</b></td><td>57.5</td><td><b>109.6</b></td><td><b>109.8</b></td><td><b>108.8</b></td><td><b>108.4</b></td><td><b>109.7</b></td><td><b>110.7</b></td><td><b>111.4 ± 0.1</b></td></tr>
+      <tr><td>Medium</td><td>HalfCheetah</td><td>44.4</td><td>40.7</td><td>47.4</td><td>45.9</td><td>49.1</td><td>44.2</td><td>50.6</td><td><b>54.1</b></td><td><b>54.8 ± 0.1</b></td></tr>
+      <tr><td>Medium</td><td>Hopper</td><td>58.0</td><td>54.5</td><td>66.3</td><td>57.1</td><td>79.3</td><td>58.5</td><td>82.4</td><td><b>98.0</b></td><td><b>99.5 ± 1.7</b></td></tr>
+      <tr><td>Medium</td><td>Walker2d</td><td>79.2</td><td>53.1</td><td>78.3</td><td>77.9</td><td><b>82.5</b></td><td>79.7</td><td><b>85.1</b></td><td><b>86.0</b></td><td><b>86.5 ± 0.2</b></td></tr>
+      <tr><td>Medium-Replay</td><td>HalfCheetah</td><td><b>46.2</b></td><td>38.2</td><td>44.2</td><td>37.1</td><td>39.3</td><td>42.2</td><td><b>47.5</b></td><td><b>47.6</b></td><td><b>47.8 ± 0.4</b></td></tr>
+      <tr><td>Medium-Replay</td><td>Hopper</td><td>48.6</td><td>33.1</td><td>94.7</td><td>86.2</td><td><b>100.0</b></td><td><b>96.8</b></td><td><b>100.7</b></td><td><b>96.9</b></td><td><b>97.4 ± 4.0</b></td></tr>
+      <tr><td>Medium-Replay</td><td>Walker2d</td><td>26.7</td><td>15.0</td><td>73.9</td><td>65.1</td><td>75.0</td><td>61.2</td><td><b>94.3</b></td><td>84.4</td><td>79.3 ± 9.7</td></tr>
+      <tr><td colspan="2"><b>Average (Locomotion)</b></td><td>63.9</td><td>51.9</td><td>76.9</td><td>75.6</td><td>81.8</td><td>75.3</td><td>86.3</td><td><b>86.6</b></td><td>86.1</td></tr>
+    </tbody>
+  </table>
+        <h3>Image Generation</h3>
+        <p>
+      We evaluate our method on compositional text-to-image generation on <a href="https://github.com/Karine-Huang/T2I-CompBench">CompBench</a>, and class conditional ImageNet generation using an unconditional diffusion model with a pretrained classifier.
+    </p>
+    <p>
+      In compositional test-to-image, we show that inference-time search against a pretrained visual verifier such as <a href="https://github.com/xingyizhou/UniDet">UniDet</a> and <a href="https://github.com/salesforce/BLIP">BLIP</a> can generate images with complex compositional prompts.
+    </p>
+    <div class="fig-row">
+      <figure>
+        <img src="t2i1.png" alt="wrong sample without inference scaling" />
+        <figcaption>Generated sample without inference scaling. The number of bottles does not follow the prompt "eight bottles"</figcaption>
+      </figure>
+      <figure>
+        <img src="t2i2.png" alt="correct sample with inference scaling" />
+        <figcaption>Generated sample with inference scaling. The number of bottles follows the prompt "eight bottles"</figcaption>
+      </figure>
+    </div>
+
+      <p>
+        In class conditional image generation, we can generate class-conditional samples using an unconditional diffusion model with a pretrained ViT classifier as verifier.
       </p>
       <figure>
-        <img src="teaser.png" alt="Illustration of our search framework" />
-        <figcaption>Illustration of our search framework. </figcaption>
+        <img src="imagenet.png" alt="ImageNet class conditional generation", width="60%"/>
+        <figcaption>
+          Uncurated samples after inference-time scaling on ImageNet, with class 222 "kuvasz" 
+      </figcaption>
       </figure>
-      <p>
-        As shown in the above figure, we first search the vicinity of the samples via gradient-guided Langevin MCMC. Then we explore the global space to avoid stuck in local maximums and OOD samples, improving the effciency using tree-based search methods such as BFS and DFS. This unfied search framework allows us to efficiently sample from global optimal modes.
-      </p>
-    </section>
+        
 
-    <section>
-      <h2>Local Search</h2>
-      <p>We fomulate the problem as sampling from the composed distribution of the base distribution \({p}_0(\mathbf{x})\) and the verifier score
-        \(f(\mathbf{x})\):
-      </p>
-      <p>
-        $$ \tilde{p}_0(\mathbf{x}_0) \propto p_0(\mathbf{x}_0) f(\mathbf{x}_0)^\lambda $$
-      </p>
-      <p>
-        Through annealed Langevin MCMC, we construct a sequence of distributions \(\tilde{q}_t(\mathbf{x}_t)\) that gradually approaches \(\tilde{p}_0(\mathbf{x}_0)\), and sample 
-        from \(\tilde{q}_t(\mathbf{x}_t)\) at each step \(t\) using Langevin dynamics:
-        $$ \mathbf{x}_{t}^{i+1} = \mathbf{x}_t + \frac{\epsilon}{2} \nabla_{\mathbf{x}_t} \log \tilde{q}_t(\mathbf{x}_t) + \sqrt{\epsilon} \mathbf{z}_t\,,~~~\mathbf{z}_t\sim\mathcal{N}(\mathbf{0},\mathbf{I}) $$
-        which can be seen as conducting hill-climbing with the gradient flow of KL divergence between \(\tilde{q}_t\) and the distribution of \(\mathbf{x}_t\).
-      </p>
-      
-    </section>
-
-    <section>
-      <h2>Global Search</h2>
-      <p>To explore diverse modes in the multimodal distribution induced by diffusion models, we view the sampling process as a search tree, and use classical search methods such as 
-        breadth-first search (BFS) and depth-first search (DFS) to explore the space efficiently.
-      </p>
-       <figure>
-        <img src="treesearch.png" alt="Search tree for sampling" />
-        <figcaption>Illustration of global tree search methods</figcaption>
-      </figure>
-      <p>
-        This fomulation encompasses other search methods as instances or combinations of BFS and DFS, and through our extensive experiments, we demonstrate the superior efficiency and adaptivity of our search framework compared to existing methods.
-      </p>
-      
-    </section>
-
-    <section>
-      <h2>Experiments</h2>
-      <p>We conduct extensive experiments on various tasks, including long horizon maze planning, offline RL and image generation</p>
-      <h3>Maze Planning</h3>
-      We show that with inference-scaling, diffusion models can succeed in long horizon planning in complex maze environments.
-      <div class="fig-row">
-        <figure>
-          <img src="maze_giant.png" alt="maze_giant" />
-          <figcaption>Plan for PointMaze Giant</figcaption>
-        </figure>
-        <figure>
-          <img src="maze_ultra.png" alt="maze_ultra"/>
-          <figcaption>Plan for PointMaze Ultra</figcaption>
-        </figure>
-      </div>
-      <h3>Offline RL</h3>
-      We use a pretrained diffusion model and a pretrained Q-function as verifier for offline RL. Our training-free method can achieve comparable performance to the state-of-the-art training-required methods.
-      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; font-family: sans-serif;">
-  <caption style="caption-side: top; font-weight: bold; text-align: left; padding: 10px 0;">
-    Performance on D4RL locomotion tasks (mean ± std across 5 trials). Bold values are within 5% of the best for each task.
-  </caption>
-  <thead style="background-color: #f0f0f0;">
-    <tr>
-      <th>Dataset</th>
-      <th>Environment</th>
-      <th>CQL</th>
-      <th>BCQ</th>
-      <th>IQL</th>
-      <th>SfBC</th>
-      <th>DD</th>
-      <th>Diffuser</th>
-      <th>D-QL</th>
-      <th>QGPO</th>
-      <th>TTS (ours)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td>Medium-Expert</td><td>HalfCheetah</td><td>62.4</td><td>64.7</td><td>86.7</td><td><b>92.6</b></td><td>90.6</td><td>79.8</td><td><b>96.1</b></td><td><b>93.5</b></td><td><b>93.9 ± 0.3</b></td></tr>
-    <tr><td>Medium-Expert</td><td>Hopper</td><td>98.7</td><td>100.9</td><td>91.5</td><td>108.6</td><td><b>111.8</b></td><td><b>107.2</b></td><td><b>110.7</b></td><td><b>108.0</b></td><td>104.4 ± 3.1</td></tr>
-    <tr><td>Medium-Expert</td><td>Walker2d</td><td><b>111.0</b></td><td>57.5</td><td><b>109.6</b></td><td><b>109.8</b></td><td><b>108.8</b></td><td><b>108.4</b></td><td><b>109.7</b></td><td><b>110.7</b></td><td><b>111.4 ± 0.1</b></td></tr>
-    <tr><td>Medium</td><td>HalfCheetah</td><td>44.4</td><td>40.7</td><td>47.4</td><td>45.9</td><td>49.1</td><td>44.2</td><td>50.6</td><td><b>54.1</b></td><td><b>54.8 ± 0.1</b></td></tr>
-    <tr><td>Medium</td><td>Hopper</td><td>58.0</td><td>54.5</td><td>66.3</td><td>57.1</td><td>79.3</td><td>58.5</td><td>82.4</td><td><b>98.0</b></td><td><b>99.5 ± 1.7</b></td></tr>
-    <tr><td>Medium</td><td>Walker2d</td><td>79.2</td><td>53.1</td><td>78.3</td><td>77.9</td><td><b>82.5</b></td><td>79.7</td><td><b>85.1</b></td><td><b>86.0</b></td><td><b>86.5 ± 0.2</b></td></tr>
-    <tr><td>Medium-Replay</td><td>HalfCheetah</td><td><b>46.2</b></td><td>38.2</td><td>44.2</td><td>37.1</td><td>39.3</td><td>42.2</td><td><b>47.5</b></td><td><b>47.6</b></td><td><b>47.8 ± 0.4</b></td></tr>
-    <tr><td>Medium-Replay</td><td>Hopper</td><td>48.6</td><td>33.1</td><td>94.7</td><td>86.2</td><td><b>100.0</b></td><td><b>96.8</b></td><td><b>100.7</b></td><td><b>96.9</b></td><td><b>97.4 ± 4.0</b></td></tr>
-    <tr><td>Medium-Replay</td><td>Walker2d</td><td>26.7</td><td>15.0</td><td>73.9</td><td>65.1</td><td>75.0</td><td>61.2</td><td><b>94.3</b></td><td>84.4</td><td>79.3 ± 9.7</td></tr>
-    <tr><td colspan="2"><b>Average (Locomotion)</b></td><td>63.9</td><td>51.9</td><td>76.9</td><td>75.6</td><td>81.8</td><td>75.3</td><td>86.3</td><td><b>86.6</b></td><td>86.1</td></tr>
-  </tbody>
-</table>
-      <h3>Image Generation</h3>
-      <p>
-  We evaluate our method on compositional text-to-image generation on <a href="https://github.com/Karine-Huang/T2I-CompBench">CompBench</a>, and class conditional ImageNet generation using an unconditional diffusion model with a pretrained classifier.
-</p>
-<p>
-  In compositional test-to-image, we show that inference-time search against a pretrained visual verifier such as <a href="https://github.com/xingyizhou/UniDet">UniDet</a> and <a href="https://github.com/salesforce/BLIP">BLIP</a> can generate images with complex compositional prompts.
-</p>
-<div class="fig-row">
-  <figure>
-    <img src="t2i1.png" alt="wrong sample without inference scaling" />
-    <figcaption>Generated sample without inference scaling. The number of bottles does not follow the prompt "eight bottles"</figcaption>
-  </figure>
-  <figure>
-    <img src="t2i2.png" alt="correct sample with inference scaling" />
-    <figcaption>Generated sample with inference scaling. The number of bottles follows the prompt "eight bottles"</figcaption>
-  </figure>
-</div>
-
-    <p>
-      In class conditional image generation, we can generate class-conditional samples using an unconditional diffusion model with a pretrained ViT classifier as verifier.
-    </p>
-    <figure>
-      <img src="imagenet.png" alt="ImageNet class conditional generation"/>
-      <figcaption>
-        Generated samples after inference-time scaling on ImageNet, with class 222 "kuvasz" 
-    </figcaption>
-    </figure>
-      
-
-    </section>
-    <section>
-      <h2>Conclusion</h2>
-      <p>We propose a principled and general framework for inference-time scaling of diffusion models through search, which can be applied to various tasks such as planning, reinforcement learning and image generation. Still, inference-time base approaches require more hyper-parameter tuning than naive sampling, which we leave as a future work</p>
-    </section>
+      </section>
+      <section>
+        <h2>Conclusion</h2>
+        <p>We propose a principled and general framework for inference-time scaling of diffusion models through search, which can be applied to various tasks such as planning, reinforcement learning and image generation. Still, inference-time base approaches require more hyper-parameter tuning than naive sampling, which we leave as a future work</p>
+      </section>
+    </div>
   </main>
 </body>
 </html>
