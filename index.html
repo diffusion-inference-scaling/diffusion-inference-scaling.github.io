@@ -126,7 +126,7 @@
           When using determinstic ODE-solvers as samplers, sampling more than one children from the same particle results in duplication. 
           In <strong>BFS-Pruning</strong>, we then prune the particles with:
           $$n_t^k = \min\left(1, \texttt{Round} \left(N_t\frac{f(\mathbf{x}_{0|t}^k)}{\sum_{j=1}^{N_t} f(\mathbf{x}_{0|t}^j)} \right) \right)$$
-          so we sample at most one children for each parent particle \(\mathbf{x}_t^k\), gradually decreasing the tree width.
+          so we sample at most one children for each parent particle \(\mathbf{x}_t^k\), gradually removing bad samples.
         </p>
         <h3>DFS</h3>
         In <strong>DFS</strong>, we only denoise one particle, and set a threshold \(\delta_t\) for the verifier score. 
