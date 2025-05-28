@@ -115,18 +115,18 @@
         <h3>BFS</h3>
         <p>
           In BFS, similar to best-first search where we use a heuristic to evaluate intermediate states, 
-          we dynamically allocate compute to intermediate particles \(\mathbf{x}_t\) at certain time step \(t\) based on their verifier scores \(f(\mathbf{x}_{0|t})\). 
+          we dynamically allocate compute to intermediate particles \(\mathbf{x}_t\) by sampling varying number of children based on their verifier score estimate.
         </p>
         <p>
-          In <strong>BFS-Resampling</strong>, we sample \(n_t^k\) children for particle \(\mathbf{x}_t^k\) at time step \(t\) propotional to the verifier score:
+          In <strong>BFS-Resampling</strong>, we sample \(n_t^k\) children for particle \(\mathbf{x}_t^k\) at time step \(t\) propotional to their verifier score:
           $$ n_t^k =  \texttt{Round} \left(N_t\frac{f(\mathbf{x}_{0|t}^k)}{\sum_{j=1}^{N_t} f(\mathbf{x}_{0|t}^j)} \right) $$
           where \(N_t\) is the number of particles at time step \(t\).
         </p>
         <p>
-          In <strong>BFS-Pruning</strong>, when using determinstic ODE-solvers as samplers, sampling more than one particle results in duplication. 
-          We then prune the particles with:
+          When using determinstic ODE-solvers as samplers, sampling more than one particle results in duplication. 
+          In <strong>BFS-Pruning</strong>, we then prune the particles with:
           $$n_t^k = \min\left(1, \texttt{Round} \left(N_t\frac{f(\mathbf{x}_{0|t}^k)}{\sum_{j=1}^{N_t} f(\mathbf{x}_{0|t}^j)} \right) \right)$$
-          so we sample at most one children for each parent particle \(\mathbf{x}_t^k\).
+          so we sample at most one children for each parent particle \(\mathbf{x}_t^k\), gradually decreasing the tree width.
         </p>
         <h3>DFS</h3>
         In <strong>DFS</strong>, we only denoise one particle, and set a threshold \(\delta_t\) for the verifier score. 
