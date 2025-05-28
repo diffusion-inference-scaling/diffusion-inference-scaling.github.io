@@ -123,7 +123,7 @@
           where \(N_t\) is the number of particles at time step \(t\).
         </p>
         <p>
-          When using determinstic ODE-solvers as samplers, sampling more than one particle results in duplication. 
+          When using determinstic ODE-solvers as samplers, sampling more than one children from the same particle results in duplication. 
           In <strong>BFS-Pruning</strong>, we then prune the particles with:
           $$n_t^k = \min\left(1, \texttt{Round} \left(N_t\frac{f(\mathbf{x}_{0|t}^k)}{\sum_{j=1}^{N_t} f(\mathbf{x}_{0|t}^j)} \right) \right)$$
           so we sample at most one children for each parent particle \(\mathbf{x}_t^k\), gradually decreasing the tree width.
