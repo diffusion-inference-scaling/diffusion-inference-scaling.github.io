@@ -271,6 +271,34 @@
         <h2>Conclusion</h2>
         <p>We propose a principled and general framework for inference-time scaling of diffusion models through search, which can be applied to various tasks such as planning, reinforcement learning and image generation. Still, inference-time base approaches require more hyper-parameter tuning than naive sampling, which we leave as a future work</p>
       </section>
+      
+
+      <section>
+        <h2>Citation</h2>
+        <div style="position: relative; margin-bottom: 2em;">
+          <button id="copy-bibtex" style="position: absolute; top: 10px; right: 10px; padding: 4px 10px; font-size: 0.95em; cursor: pointer;">Copy</button>
+          <pre id="bibtex-entry" style="padding-top: 2.5em; background: #f9f9f9; border-radius: 4px; font-size: 0.98em; overflow-x: auto;">
+@inproceedings{your2024diffusionscaling,
+  title={Inference-Time Scaling of Diffusion Models through Classical Search},
+  author={Xiangcheng Zhang and Haowei Lin and Haotian Ye and James Zou and Jianzhu Ma and Yitao Liang and Yilun Du},
+  booktitle={Conference on Example AI Research},
+  year={2024}
+}
+          </pre>
+        </div>
+        <script>
+          document.getElementById('copy-bibtex').onclick = function() {
+            const bib = document.getElementById('bibtex-entry').innerText;
+            navigator.clipboard.writeText(bib);
+            this.textContent = 'Copied!';
+            setTimeout(() => { this.textContent = 'Copy'; }, 1500);
+          };
+        </script>
+      </section>
+
+
+
+
     </div>
   </main>
 </body>
