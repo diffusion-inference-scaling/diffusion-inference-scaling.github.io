@@ -160,9 +160,10 @@
         <h3>Maze Planning</h3>
         <p>
         We show that with inference-scaling, diffusion models can succeed in long horizon planning in complex maze environments. 
-        We  define the verifier loss as the collision of particles in the generated trajectory with the maze wall blocks:
-        $$L(\mathbf{\tau})=\sum_{i=1}^H\texttt{check_collision}\left(\text{point}_i\right)\texttt{distance}\left(\text{point}_i\,,~ \text{maze walls}\right)$$
-        so we minimize the violation of the trajectory with inference-scaling.
+        We sample from the composed distribution:
+        $$ \tilde{p}_0(\mathbf{\tau}_0) \propto p_0(\mathbf{\tau}_0) \exp{\left(-\lambda L(\mathbf{\tau}_0)\right)}$$
+        where \( L(\mathbf{\tau}_0) \) measures the collision of the trajectory \(\mathbf{\tau}_0\) with the maze walls, 
+        so we minimize the violation of the generated plan.
         </p>
         <div class="fig-row" style="align-items: flex-start;">
           <figure>
