@@ -28,16 +28,21 @@
         GitHub
       </a>
       <div class="author-list">
-        <span>Xiangcheng Zhang</span>
-        <span>Haowei Lin</span>
-        <span>Haotian Ye</span>
-        <span>James Zou</span>
-        <span>Jianzhu Ma</span>
-        <span>Yitao Liang</span>
-        <span>Yilun Du</span>
+        <span>Xiangcheng Zhang<sup>1</sup></span>
+        <span>Haowei Lin<sup>1</sup></span>
+        <span>Haotian Ye<sup>2</sup></span>
+        <span>James Zou<sup>2</sup></span>
+        <span>Jianzhu Ma<sup>1</sup></span>
+        <span>Yitao Liang<sup>1</sup></span>
+        <span>Yilun Du<sup>3</sup><sup>&dagger;</sup></span>
+      </div>
+      <div class="affiliations">
+        <span><sup>1</sup>Helixon US Inc.</span>
+        <span><sup>2</sup>Stanford University</span>
+        <span><sup>3</sup>Harvard University</span>
       </div>
       <div class="correspondence">
-        Corresponding author: Yilun Du. Contact: <a href="mailto:ydu@seas.harvard.edu">ydu@seas.harvard.edu</a>
+        <sup>&dagger;</sup>Corresponding author: Yilun Du. Contact: <a href="mailto:ydu@seas.harvard.edu">ydu@seas.harvard.edu</a>
       </div>
     </header>
     <div class="content">
@@ -89,6 +94,11 @@
           $$ \mathbf{x}_{t}^{i+1} = \mathbf{x}_t^i + \frac{\epsilon}{2} \nabla_{\mathbf{x}_t} \log \tilde{q}_t(\mathbf{x}_t^i) + \sqrt{\epsilon} \mathbf{z}_t^i\,,~~~\mathbf{z}_t^i\sim\mathcal{N}(\mathbf{0},\mathbf{I}) $$
           which can be seen as conducting hill-climbing, following the gradient flow of the KL divergence between \(\tilde{q}_t\) and the distribution of current sample \(\mathbf{x}_t\).
         </p>
+        <div style="display: flex; justify-content: center;">
+          <video autoplay loop muted style="width: 60%; max-width: 600px; margin: 20px auto; align-items: center;">
+            <source src="local_search_video.mp4" type="video/mp4">
+          </video>
+        </div>
         
       </section>
 
