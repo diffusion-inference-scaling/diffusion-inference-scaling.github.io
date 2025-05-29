@@ -67,12 +67,13 @@
           flexible control at inference time, which is crucial for tasks like planning and reinforcement learning. We approach this challenge from the inference-time scaling perspective, leveraging classical search methods to 
           search the generative space of diffusion models for high quality samples.
         </p>
-        <figure>
-          <img src="teaser.png" alt="Illustration of our search framework" />
-          <figcaption>Illustration of our search framework. </figcaption>
-        </figure>
+        <div style="display: flex; justify-content: center;">
+          <video autoplay loop muted style="width: 60%; max-width: 600px; margin: 20px auto; align-items: center;">
+            <source src="teser-video.mp4" type="video/mp4">
+          </video>
+        </div>
         <p>
-          As shown in the above figure, we first search the vicinity of the samples via gradient-guided local search. 
+          As shown in the above demo, we first search the vicinity of the samples via gradient-guided local search. 
           To avoid being stuck in local maximums and OOD samples, 
           we explore the the diverse modes in the multimodal generative space globally, 
           improving the effciency using tree-based search methods such as BFS and DFS. 
@@ -177,6 +178,9 @@
         where \( L(\mathbf{\tau}_0) \) measures the collision of the trajectory \(\mathbf{\tau}_0\) with the maze walls, 
         so we minimize the violation of the generated plan.
         </p>
+        <p>
+          Below, we show with local search, the model is able to generate complex and successful plans.
+        </p>
         <div class="fig-row" style="align-items: flex-start;">
           <figure>
             <img src="maze_giant.png" alt="maze_giant"/>
@@ -187,6 +191,20 @@
             <figcaption>Generated plan for PointMaze Ultra</figcaption>
           </figure>
         </div>
+        <p>
+          With global search, we can further reach over 80% success rate.
+        </p>
+        <div class="fig-row" style="align-items: flex-start;">
+          <figure>
+            <img src="maze_giant_curve.png" alt="maze_giant"/>
+            <figcaption>Scaling curve for PointMaze Giant</figcaption>
+          </figure>
+          <figure>
+            <img src="maze_ultra_curve.png" alt="maze_ultra"/>
+            <figcaption>Scaling curve for PointMaze Ultra</figcaption>
+          </figure>
+        </div>
+
         <h3>Offline RL</h3>
         <p>
         We use a pretrained diffusion model and a pretrained Q-function as verifier for offline RL. 
@@ -254,6 +272,19 @@
         <figcaption>Generated sample with inference scaling using UniDet. The number of bottles follows the prompt "eight bottles"</figcaption>
       </figure>
     </div>
+    <p>
+      Below is the scaling curve of DFS on the 5 datasets in the attribute binding and object relationship tasks.
+    </p>
+    <div class="fig-row">
+      <figure>
+        <img src="t2i_curve1.png" alt="wrong sample without inference scaling" />
+        <figcaption>Generated sample without inference scaling. The number of bottles does not follow the prompt "eight bottles"</figcaption>
+      </figure>
+      <figure>
+        <img src="t2i_curve2.png" alt="correct sample with inference scaling" />
+        <figcaption>Generated sample with inference scaling using UniDet. The number of bottles follows the prompt "eight bottles"</figcaption>
+      </figure>
+    </div>
 
       <p>
         In class-conditional image generation, we generate samples aligned with a target class label using an <strong>unconditional diffusion model</strong> guided by a pretrained ViT <strong>classifier</strong> as a verifier.
@@ -266,7 +297,19 @@
           Uncurated samples after inference-time scaling on ImageNet, with class 222 "kuvasz" 
       </figcaption>
       </figure>
-        
+      <p>
+        Below is the scaling curve of BFS on ImageNet, showing FID and class accuracy over 256 samples.
+      </p>
+      <div class="fig-row">
+      <figure>
+        <img src="imagenet_fid.png" alt="wrong sample without inference scaling" />
+        <figcaption>Generated sample without inference scaling. The number of bottles does not follow the prompt "eight bottles"</figcaption>
+      </figure>
+      <figure>
+        <img src="imagenet_acc.png" alt="correct sample with inference scaling" />
+        <figcaption>Generated sample with inference scaling using UniDet. The number of bottles follows the prompt "eight bottles"</figcaption>
+      </figure>
+    </div>
 
       </section>
       <section>
