@@ -122,20 +122,36 @@
           $$ n_t^k =  \texttt{Round} \left(N_t\frac{f(\mathbf{x}_{0|t}^k)}{\sum_{j=1}^{N_t} f(\mathbf{x}_{0|t}^j)} \right) $$
           where \(N_t\) is the number of particles at time step \(t\).
         </p>
+        <div style="display: flex; justify-content: center;">
+          <video autoplay loop muted style="width: 60%; max-width: 600px; margin: 20px auto; align-items: center;">
+            <source src="BFS-resample-video.mp4" type="video/mp4">
+          </video>
+        </div>
         <p>
           When using determinstic ODE-solvers as samplers, sampling more than one children from the same particle results in duplication. 
           In <strong>BFS-Pruning</strong>, we then prune the particles with:
           $$n_t^k = \min\left(1, \texttt{Round} \left(N_t\frac{f(\mathbf{x}_{0|t}^k)}{\sum_{j=1}^{N_t} f(\mathbf{x}_{0|t}^j)} \right) \right)$$
           so we sample at most one children for each parent particle \(\mathbf{x}_t^k\), gradually removing bad samples.
         </p>
+        <div style="display: flex; justify-content: center;">
+          <video autoplay loop muted style="width: 60%; max-width: 600px; margin: 20px auto; align-items: center;">
+            <source src="BFS-pruning-video.mp4" type="video/mp4">
+          </video>
+        </div>
         <h3>DFS</h3>
+        <p>
         In <strong>DFS</strong>, we only denoise one particle, and set a threshold \(\delta_t\) for the verifier score. 
         When the verifier score estimate falls below the threshold:
         $$ f(\mathbf{x}_{0|t}) < \delta_t $$
         we <strong>backtrack</strong> by adding noise to a higher noise level:
         $$ t_{\text{next}}=t+\Delta,~~~\mathbf{x}_{t_{\text{next}}} = \mathbf{x}_t + \sqrt{\sigma_{t_{\text{next}}}^2-\sigma_t^2}\mathbf{z}\,,~~~\mathbf{z}\sim\mathcal{N}(\mathbf{0},\mathbf{I})$$
         where \(\Delta\) is the backtrack step size.
-        
+        </p>
+        <div style="display: flex; justify-content: center;">
+          <video autoplay loop muted style="width: 60%; max-width: 600px; margin: 20px auto; align-items: center;">
+            <source src="DFS-video.mp4" type="video/mp4">
+          </video>
+        </div>
       </section>
 
       <section>
